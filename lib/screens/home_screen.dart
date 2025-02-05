@@ -4,6 +4,8 @@ import '../providers/flashcard_provider.dart';
 import '../widgets/flashcard_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Get the list of flashcards from the provider

@@ -8,11 +8,11 @@ class FlashcardWidget extends StatefulWidget {
   final String id;
 
   const FlashcardWidget({
-    Key? key,
+    super.key,
     required this.question,
     required this.answer,
     required this.id,
-  }) : super(key: key);
+  });
 
   @override
   _FlashcardWidgetState createState() => _FlashcardWidgetState();
@@ -30,7 +30,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _flipCard, // Flip the card on tap
+      onTap: _flipCard, // Change color and show answer on tap
       child: Consumer(
         builder: (context, ref, child) {
           return Dismissible(
@@ -51,12 +51,7 @@ class _FlashcardWidgetState extends State<FlashcardWidget> {
             ),
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 500),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return RotationYTransition(child: child, animation: animation); // Flip effect
-              },
-              child: _isFlipped
-                  ? _buildCard(widget.answer, key: ValueKey(true))
-                  : _buildCard(widget.question, key: ValueKey(false)),
+              child: _buildCard(_isFlipped ? widget.answer : widget.question),
             ),
           );
         },
@@ -64,47 +59,23 @@ class _FlashcardWidgetState extends State<FlashcardWidget> {
     );
   }
 
-  // Build the card UI
-  Widget _buildCard(String text, {Key? key}) {
+  // Build the card UI with dynamic background color
+  Widget _buildCard(String text) {
     return Container(
-      key: key,
+      key: ValueKey(text), // Use the text itself as a key for switching between the question and answer
       width: 300,
       height: 200,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        color: _isFlipped ? Colors.green : Colors.blueAccent, // Change color when flipped
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
       ),
       child: Text(
         text,
-        style: TextStyle(fontSize: 20, color: Colors.white),
+        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
         textAlign: TextAlign.center,
       ),
-    );
-  }
-}
-
-// Custom animation class for Y-axis rotation (flip effect)
-class RotationYTransition extends StatelessWidget {
-  final Widget child;
-  final Animation<double> animation;
-
-  const RotationYTransition({required this.child, required this.animation});
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (context, child) {
-        final angle = animation.value * 3.1416;
-        return Transform(
-          transform: Matrix4.rotationY(angle),
-          alignment: Alignment.center,
-          child: child,
-        );
-      },
-      child: child,
     );
   }
 }
