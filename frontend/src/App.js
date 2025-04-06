@@ -2,18 +2,26 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const [msg, setMsg] = useState("");
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/test")
-      .then(res => setMsg(res.data.message))
-      .catch(err => console.error(err));
-  }, []);
-
+  const handleUpload = async (e) => {
+    const formData = new FormData();
+    formData.append("pdf", e.target.files[0]);
+  
+    try {
+      const res = await axios.post("http://localhost:3001/api/upload/pdf", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(res.data);
+    } catch (err) {
+      console.error("Upload failed", err);
+    }
+  };
+  
   return (
-    <div>
-      <h1>Test CORS Connection</h1>
-      <p>{msg}</p>
+    <div className="App">
+      <h1>PDF Upload</h1>
+      <input type="file" accept=".pdf" onChange={handleUpload} />
     </div>
   );
 }
