@@ -31,7 +31,7 @@ cd frontend
 npm install
 npm start
 
----
+```
 
 ## Future Improvements
 ✅ Support multiple tag search (/by-tags?tags=AI,ML)
