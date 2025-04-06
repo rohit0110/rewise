@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const PdfTextSchema = new mongoose.Schema({
   filename: String,
   text: String,
+  topic: String,
   uploadedAt: { type: Date, default: Date.now },
 });
 
