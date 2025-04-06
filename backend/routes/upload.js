@@ -15,25 +15,31 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // 📤 POST /api/upload/pdf
-router.post("/pdf", upload.single("pdf"), async (req, res) => {
-  const filePath = req.file.path;
-
-  try {
-    const dataBuffer = fs.readFileSync(filePath);
-    const pdfData = await pdfParse(dataBuffer);
-
-    // Save both original filename + text
-    const savedDoc = new PdfText({
-      filename: req.file.originalname,
-      text: pdfData.text,
-    });
-    await savedDoc.save();
-    console.log("PDF parsed and saved:", savedDoc);
-    res.json({ message: "PDF uploaded and processed", data: savedDoc });
-  } catch (err) {
-    console.error("Error parsing PDF:", err);
-    res.status(500).json({ error: "Failed to parse PDF" });
-  }
-});
+router.post("/", upload.single("pdf"), async (req, res) => {
+    const file = req.file;
+    const tags = req.body.tags?.split(',').map(tag => tag.trim()) || [];
+  
+    if (!file) return res.status(400).json({ error: "No file uploaded" });
+  
+    const fileBuffer = fs.readFileSync(file.path);
+  
+    try {
+      const data = await pdfParse(fileBuffer);
+      const extractedText = data.text;
+  
+      const savedDoc = new PdfText({
+        filename: file.originalname,
+        text: extractedText,
+        tags: tags
+      });
+  
+      await savedDoc.save();
+      res.status(200).json({ message: "Upload successful", doc: savedDoc });
+    } catch (err) {
+      console.error("Error parsing PDF:", err);
+      res.status(500).json({ error: "Failed to parse and save PDF" });
+    }
+  });
+  
 
 module.exports = router;

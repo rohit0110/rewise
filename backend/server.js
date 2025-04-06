@@ -6,6 +6,7 @@ require("dotenv").config();
 // Create Express app
 const app = express();
 const uploadRoutes = require("./routes/upload");
+const revisionRoutes = require("./routes/revision");
 
 // Enable CORS for all routes
 app.use(cors());
@@ -25,7 +26,7 @@ app.get("/api/test", (req, res) => {
 });
 
 app.use("/api/upload", uploadRoutes);
-
+app.use("/api/revision", revisionRoutes);
 // Start server
 app.listen(process.env.PORT, () => {
   console.log(`🚀 Server is running on port ${process.env.PORT}`);
