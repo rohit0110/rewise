@@ -1,6 +1,6 @@
 const express = require("express");
 const { PdfText } = require("../models/pdfText.js"); 
-const { generateFlashcard, generateMCQ } = require("../services/llmService");
+const { generateFlashcard } = require("../services/llmService");
 
 const router = express.Router();
 
@@ -31,4 +31,18 @@ router.post("/generate-flashcard", async (req, res) => {
     }
   });
 
+router.get("/:id/questions", async (req, res) => {
+    try {
+    const doc = await PdfText.findById(req.params.id);
+    if (!doc) return res.status(404).json({ error: "Not found" });
+
+    res.json({
+        flashcards: doc.flashcards,
+        mcqs: doc.mcqs,
+    });
+    } catch (err) {
+    res.status(500).json({ error: "Server error" });
+    }
+});
+  
 module.exports = router;

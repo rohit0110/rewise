@@ -1,15 +1,26 @@
 const mongoose = require("mongoose");
 
-const PdfTextSchema = new mongoose.Schema({
-  filename: String,
-  text: String,
-  tags: [String], // <-- multi-tag support
-  uploadedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+const pdfTextSchema = new mongoose.Schema({
+    title: String,
+    tags: [String],
+    text: String,
+    flashcards: [
+        {
+            question: String,
+            answer: String,
+        }
+    ],
+    mcqs: [
+        {
+            question: String,
+            options: [String],
+            answer: String,
+        }
+    ],
+    filePath: String,
+  });
+  
 
-const PdfText = mongoose.model("PdfText", PdfTextSchema);
+const PdfText = mongoose.model("PdfText", pdfTextSchema);
 
 module.exports = { PdfText };

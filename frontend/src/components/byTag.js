@@ -41,10 +41,27 @@ export default function ByTag() {
           <p>No results yet</p>
         ) : (
           results.map((doc, idx) => (
-            <div key={idx} className="border p-2 rounded mb-2">
-              <h3 className="font-bold text-gray-800">Document #{idx + 1}</h3>
-              <p className="text-sm text-gray-600">{doc.text.slice(0, 300)}...</p>
-              <p className="text-xs text-gray-500">Tags: {doc.tags.join(", ")}</p>
+            <div key={idx} className="border p-4 rounded mb-4 shadow-sm bg-white">
+              <h3 className="font-bold text-gray-800 mb-1">Document #{idx + 1}</h3>
+              <p className="text-sm text-gray-600">
+  {doc.text ? `${doc.text.slice(0, 300)}...` : "No text available"}
+</p>
+              <p className="text-xs text-gray-500 mb-2">Tags: {doc.tags.join(", ")}</p>
+
+              {/* Flashcards Section */}
+              {doc.flashcards?.length > 0 && (
+                <div className="mt-3">
+                  <h4 className="font-semibold text-gray-800 mb-1">Flashcards:</h4>
+                  <ul className="list-disc ml-6 text-sm text-gray-700">
+                    {doc.flashcards.map((fc, i) => (
+                      <li key={i} className="mb-2">
+                        <p><strong>Q:</strong> {fc.question}</p>
+                        <p><strong>A:</strong> {fc.answer}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ))
         )}
