@@ -1,5 +1,6 @@
 const express = require("express");
 const { PdfText } = require("../models/pdfText.js"); 
+const { generateFlashcard, generateMCQ } = require("../services/llmService");
 
 const router = express.Router();
 
@@ -14,5 +15,20 @@ router.get("/by-tag/:tag", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch documents" });
   }
 });
+
+router.post("/generate-flashcard", async (req, res) => {
+    const { extractedText } = req.body;
+  
+    if (!extractedText) {
+      return res.status(400).json({ error: "No text provided" });
+    }
+  
+    try {
+      const result = await generateFlashcard(extractedText);
+      res.json({ revision: result });
+    } catch (err) {
+      res.status(500).json({ error: "Failed to generate flashcards" });
+    }
+  });
 
 module.exports = router;

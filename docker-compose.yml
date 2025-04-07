@@ -13,5 +13,15 @@ services:
     volumes:
       - mongo-data:/data/db
 
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    restart: always
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
 volumes:
   mongo-data:
+  ollama-data:
