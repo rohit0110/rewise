@@ -1,6 +1,6 @@
 // src/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import flashCardsReducer from './store/flashcardSlice';
+import flashCardsReducer from './store/FlashcardSlice';
 
 const store = configureStore({
   reducer: {
