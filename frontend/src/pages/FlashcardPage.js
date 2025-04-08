@@ -1,7 +1,7 @@
 // src/pages/FlashcardPage.js
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { nextFlashCard, prevFlashCard, flipFlashCard } from '../store/flashcardSlice';
+import { nextFlashCard, prevFlashCard, flipFlashCard } from '../store/FlashcardSlice';
 
 export default function FlashcardPage() {
   const dispatch = useDispatch();
