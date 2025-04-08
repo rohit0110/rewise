@@ -17,7 +17,14 @@ const upload = multer({ storage });
 // 📤 POST /api/upload/pdf
 router.post("/", upload.single("pdf"), async (req, res) => {
   const file = req.file;
-  const tags = req.body.tags?.split(',').map(tag => tag.trim()) || [];
+  // const tags = req.body.tags?.split(',').map(tag => tag.trim()) || [];
+  let tags = [];
+  try {
+    tags = JSON.parse(req.body.tags);
+    if (!Array.isArray(tags)) throw new Error();
+  } catch {
+    return res.status(400).json({ error: "Invalid tags format. Must be a JSON array." });
+  }
 
   if (!file) return res.status(400).json({ error: "No file uploaded" });
 
