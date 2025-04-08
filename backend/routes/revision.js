@@ -4,6 +4,7 @@ const { generateFlashcard } = require("../services/llmService");
 
 const router = express.Router();
 
+// Fetch all documents with these tags
 router.get("/by-tag/:tag", async (req, res) => {
   const tag = req.params.tag;
 
@@ -15,6 +16,35 @@ router.get("/by-tag/:tag", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch documents" });
   }
 });
+
+// GET /api/tags - Return all unique tags
+router.get("/tags", async (req, res) => {
+  try {
+    const docs = await PdfText.find({}, "tags");
+    const allTags = docs.flatMap(doc => doc.tags || []);
+    const uniqueTags = [...new Set(allTags)];
+    res.json({ tags: uniqueTags });
+  } catch (err) {
+    console.error("Failed to fetch tags:", err);
+    res.status(500).json({ error: "Failed to fetch tags" });
+  }
+});
+
+// 📄 GET /api/revision/headings - Get all PDF titles with their _id
+router.get("/headings", async (req, res) => {
+  try {
+    const docs = await PdfText.find({}, "title");
+    const headings = docs.map(doc => ({
+      id: doc._id,
+      title: doc.title,
+    }));
+    res.status(200).json({ headings });
+  } catch (err) {
+    console.error("Failed to fetch headings:", err);
+    res.status(500).json({ error: "Failed to fetch headings" });
+  }
+});
+
 
 router.post("/generate-flashcard", async (req, res) => {
     const { extractedText } = req.body;

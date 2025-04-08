@@ -7,6 +7,12 @@ export default function MenuPage() {
       <div className="w-full max-w-md px-4 text-center">
         <h1 className="text-3xl font-bold mb-8">Rewise Menu</h1>
         <div className="flex flex-col gap-6">
+        <MenuCard
+            to="/revision"
+            title="Revision"
+            subtitle="Revise using your own documents"
+            color="blue"
+          />
           <MenuCard
             to="/flashcards"
             title="Flashcards"
